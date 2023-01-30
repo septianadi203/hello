@@ -1,20 +1,15 @@
 package database
 
 import (
+	"fmt"
 	"housy/models"
 	"housy/pkg/mysql"
-	"fmt"
 )
 
 func RunMigration() {
 	err := mysql.DB.AutoMigrate(
 		&models.User{},
-		&models.ListAs{},
-		// &models.Profile{},
-		// &models.Product{},
-		// &models.Category{},
-		// &models.Transaction{},
-	)
+		&models.House{})
 
 	if err != nil {
 		fmt.Println(err)
