@@ -8,7 +8,7 @@ type Transaction struct {
 	House         House  `json:"house"`
 	UserId        int    `json:"user_id"`
 	User          User   `json:"user" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	Total         string `json:"total"`
+	Total         int    `json:"total"`
 	StatusPayment string `json:"status_payment"`
 	Attachment    string `json:"attachment" `
 }
