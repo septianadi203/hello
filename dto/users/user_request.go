@@ -12,3 +12,4 @@ type RequestUser struct {
 	Address    string `json:"address" gorm:"type : varchar(255)" validate:"required"`
 	Image      string `json:"image" gorm:"type : varchar(255)" validate:"required"`
 }
+

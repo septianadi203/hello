@@ -72,10 +72,10 @@ func (h *handlerAuth) SignUp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	signUpResponse := authdto.SignUpResponse{
-		Username: data.Username,
-		Message:  "Successfully Sign Up!",
-		Password: data.Password,
-		ListAsRole:data.ListAsRole,
+		Username:   data.Username,
+		Message:    "Successfully Sign Up!",
+		Password:   data.Password,
+		ListAsRole: data.ListAsRole,
 	}
 
 	w.WriteHeader(http.StatusOK)
@@ -112,7 +112,7 @@ func (h *handlerAuth) SignIn(w http.ResponseWriter, r *http.Request) {
 	isValid := bcrypt.CheckPasswordHash(request.Password, user.Password)
 	if !isValid {
 		w.WriteHeader(http.StatusBadRequest)
-		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: "wrong email or password"}
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: "wrong username or password"}
 		json.NewEncoder(w).Encode(response)
 		return
 	}

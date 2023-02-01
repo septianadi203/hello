@@ -5,6 +5,7 @@ import (
 	dto "housy/dto/result"
 	usersdto "housy/dto/users"
 	"housy/models"
+	"housy/pkg/bcrypt"
 	"housy/repositories"
 	"net/http"
 	"strconv"
@@ -110,15 +111,55 @@ func (h *handlerUser) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	id, _ := strconv.Atoi((mux.Vars(r)["id"]))
+	user, err := h.UserRepository.GetUser(int(id))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		response := dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+		return
+	}
 
-	user := models.User{}
+	password, err := bcrypt.HashingPassword(request.Password)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		response := dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()}
+		json.NewEncoder(w).Encode(response)
+	}
 
 	if request.Fullname != "" {
 		user.Fullname = request.Fullname
 	}
 
-	if request.Password != "" {
-		user.Password = request.Password
+	if request.Username != "" {
+		user.Username = request.Username
+	}
+
+	if request.Email != "" {
+		user.Email = request.Email
+	}
+
+	if password != "" {
+		user.Password = password
+	}
+
+	if request.ListAsRole != "" {
+		user.ListAsRole = request.ListAsRole
+	}
+
+	if request.Gender != "" {
+		user.Gender = request.Gender
+	}
+
+	if request.Phone != "" {
+		user.Phone = request.Phone
+	}
+
+	if request.Address != "" {
+		user.Address = request.Address
+	}
+
+	if request.Image != "" {
+		user.Image = request.Image
 	}
 
 	data, err := h.UserRepository.UpdateUser(user, id)
@@ -132,7 +173,6 @@ func (h *handlerUser) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponse(data)}
 	json.NewEncoder(w).Encode(response)
-
 }
 
 func convertResponse(u models.User) usersdto.UserResponse {
